@@ -1,5 +1,10 @@
-import { resolveDeps } from '../src/server/deps.ts';
-import { handleWheelRequest } from '../src/server/handlers.ts';
+/**
+ * Source of the Vercel Function. Vercel does not bundle `api/` files, so this
+ * module and everything it imports are bundled into `api/wheel.js` by
+ * `npm run build:api` — that generated file is what gets deployed.
+ */
+import { resolveDeps } from './deps.ts';
+import { handleWheelRequest } from './handlers.ts';
 
 export const config = { runtime: 'nodejs' };
 

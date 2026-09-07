@@ -24,7 +24,7 @@ kadar adaletli) döner.
 npm install
 npm run dev      # http://localhost:5173
 npm test         # çekirdek mantığın birim testleri
-npm run build    # dist/ üretir
+npm run build    # dist/ + api/wheel.js üretir
 ```
 
 Node 20+ gerekir (bu makinede `nvm use v25.2.1`).
@@ -40,12 +40,24 @@ Node 20+ gerekir (bu makinede `nvm use v25.2.1`).
 | `src/hooks/useSpin.ts` | requestAnimationFrame ile dönüş animasyonu ve tik sesleri |
 | `src/hooks/useWheel.ts` | yerel/ortak mod, otomatik kaydetme, tazeleme |
 | `src/core/api.ts` | ortak çark API istemcisi (dönen veri yine doğrulanır) |
+| `src/server/entry.ts` | fonksiyonun kaynağı; `api/wheel.js` buradan paketlenir |
 | `src/server/handlers.ts` | `/api/wheel` uçları: oluştur / oku / güncelle |
 | `src/server/redisStore.ts` | Upstash Redis deposu ve hız sınırı |
 | `src/server/devPlugin.ts` | `npm run dev` sırasında aynı uçları bellek içi depoyla sunar |
 
 Çekirdek mantık React'ten bağımsız saf fonksiyonlardır ve testleri
 `src/core/__tests__/` altındadır.
+
+## Fonksiyon neden paketleniyor
+
+Vercel, `api/` altındaki TypeScript'i derliyor ama **paketlemiyor**: derlenmiş
+`api/wheel.js`, `src/` içine uzanan göreli import'ları olduğu gibi koruyor ve o
+dosyalar fonksiyona hiç kopyalanmadığı için çalışma anında
+`ERR_MODULE_NOT_FOUND` alınıyor. Bu yüzden fonksiyonun kaynağı
+`src/server/entry.ts` altında duruyor ve `npm run build:api` onu Node
+gömülülerinden başka hiçbir şeye ihtiyaç duymayan tek bir `api/wheel.js`
+dosyasına paketliyor. Bu dosya depoya işleniyor; bir test onun kaynağıyla
+güncel olduğunu doğruluyor.
 
 ## Ortak çark nasıl çalışıyor
 

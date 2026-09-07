@@ -17,5 +17,5 @@
     "erasableSyntaxOnly": true,
     "noFallthroughCasesInSwitch": true
   },
-  "include": ["src/server", "src/core", "api"]
+  "include": ["src/server", "src/core"]
 }

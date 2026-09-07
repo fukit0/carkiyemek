@@ -7,9 +7,10 @@ import { API_OUTFILE, apiBuildOptions } from '../../../scripts/apiBuildOptions.m
 describe('deployed api bundle', () => {
   test('the committed bundle matches its source', async () => {
     const result = await build({ ...apiBuildOptions, write: false });
-    const expected = result.outputFiles[0].text;
+    const output = result.outputFiles?.[0];
+    if (!output) throw new Error('esbuild hiç çıktı üretmedi');
 
-    expect(readFileSync(API_OUTFILE, 'utf8')).toBe(expected);
+    expect(readFileSync(API_OUTFILE, 'utf8')).toBe(output.text);
   });
 
   test('needs nothing but Node built-ins at runtime', () => {

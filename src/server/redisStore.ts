@@ -8,14 +8,29 @@ const WHEEL_TTL_SECONDS = 60 * 60 * 24 * 180;
 
 export type RedisConfig = { readonly url: string; readonly token: string };
 
+/** Marketplace integrations prefix these names (e.g. STORAGE_KV_REST_API_URL). */
+const REST_URL_SUFFIXES = ['KV_REST_API_URL', 'UPSTASH_REDIS_REST_URL'] as const;
+const STORAGE_ENV_HINT = /(KV|UPSTASH|REDIS)/;
+
 /**
- * Vercel's Upstash integration injects KV_REST_API_*; a manually created
- * Upstash database exposes UPSTASH_REDIS_REST_*. Accept either.
+ * Finds the REST credentials whatever prefix the integration chose: a key is
+ * usable only when its matching token exists under the same prefix.
  */
 export function readRedisConfig(env: Record<string, string | undefined>): RedisConfig | null {
-  const url = env.KV_REST_API_URL ?? env.UPSTASH_REDIS_REST_URL;
-  const token = env.KV_REST_API_TOKEN ?? env.UPSTASH_REDIS_REST_TOKEN;
-  return url && token ? { url, token } : null;
+  for (const urlSuffix of REST_URL_SUFFIXES) {
+    const tokenSuffix = urlSuffix.replace('_URL', '_TOKEN');
+    for (const [key, url] of Object.entries(env)) {
+      if (!url || !key.endsWith(urlSuffix)) continue;
+      const token = env[key.slice(0, key.length - urlSuffix.length) + tokenSuffix];
+      if (token) return { url, token };
+    }
+  }
+  return null;
+}
+
+/** Names only, never values: tells whether a store was wired under other names. */
+export function listStorageEnvNames(env: Record<string, string | undefined>): string[] {
+  return Object.keys(env).filter((key) => STORAGE_ENV_HINT.test(key)).sort().slice(0, 20);
 }
 
 export function createRedisStore(config: RedisConfig): WheelStore {

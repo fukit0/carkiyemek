@@ -2,6 +2,7 @@ import { beforeEach, describe, expect, test } from 'vitest';
 import { handleWheelRequest, type HandlerDeps } from '../handlers.ts';
 import { createMemoryRateLimiter, createMemoryStore } from '../memoryStore.ts';
 import { createWheelId, isValidWheelId } from '../../core/wheelId.ts';
+import { listStorageEnvNames, readRedisConfig } from '../redisStore.ts';
 
 const BASE = 'https://carkiyemek.test/api/wheel';
 const segments = [
@@ -135,5 +136,42 @@ describe('guards', () => {
     };
     const response = await handleWheelRequest(new Request(`${BASE}?id=abcdefgh`), broken);
     expect(response.status).toBe(500);
+  });
+});
+
+describe('readRedisConfig', () => {
+  test('accepts the classic Vercel KV names', () => {
+    expect(
+      readRedisConfig({ KV_REST_API_URL: 'https://x', KV_REST_API_TOKEN: 't' }),
+    ).toEqual({ url: 'https://x', token: 't' });
+  });
+
+  test('accepts native Upstash names', () => {
+    expect(
+      readRedisConfig({ UPSTASH_REDIS_REST_URL: 'https://y', UPSTASH_REDIS_REST_TOKEN: 'u' }),
+    ).toEqual({ url: 'https://y', token: 'u' });
+  });
+
+  test('accepts a prefixed pair from a Marketplace integration', () => {
+    expect(
+      readRedisConfig({
+        STORAGE_KV_REST_API_URL: 'https://z',
+        STORAGE_KV_REST_API_TOKEN: 'v',
+      }),
+    ).toEqual({ url: 'https://z', token: 'v' });
+  });
+
+  test('ignores a url whose token is missing or under another prefix', () => {
+    expect(readRedisConfig({ KV_REST_API_URL: 'https://x' })).toBeNull();
+    expect(
+      readRedisConfig({ A_KV_REST_API_URL: 'https://x', B_KV_REST_API_TOKEN: 't' }),
+    ).toBeNull();
+    expect(readRedisConfig({})).toBeNull();
+  });
+
+  test('lists storage-ish env names without leaking values', () => {
+    const names = listStorageEnvNames({ KV_REST_API_TOKEN: 'gizli', PATH: '/bin' });
+    expect(names).toEqual(['KV_REST_API_TOKEN']);
+    expect(names.join()).not.toContain('gizli');
   });
 });

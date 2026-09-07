@@ -5293,10 +5293,21 @@ var Redis2 = class _Redis extends Redis {
 var KEY_PREFIX = "wheel:";
 var RATE_PREFIX = "rate:";
 var WHEEL_TTL_SECONDS = 60 * 60 * 24 * 180;
+var REST_URL_SUFFIXES = ["KV_REST_API_URL", "UPSTASH_REDIS_REST_URL"];
+var STORAGE_ENV_HINT = /(KV|UPSTASH|REDIS)/;
 function readRedisConfig(env) {
-  const url = env.KV_REST_API_URL ?? env.UPSTASH_REDIS_REST_URL;
-  const token = env.KV_REST_API_TOKEN ?? env.UPSTASH_REDIS_REST_TOKEN;
-  return url && token ? { url, token } : null;
+  for (const urlSuffix of REST_URL_SUFFIXES) {
+    const tokenSuffix = urlSuffix.replace("_URL", "_TOKEN");
+    for (const [key, url] of Object.entries(env)) {
+      if (!url || !key.endsWith(urlSuffix)) continue;
+      const token = env[key.slice(0, key.length - urlSuffix.length) + tokenSuffix];
+      if (token) return { url, token };
+    }
+  }
+  return null;
+}
+function listStorageEnvNames(env) {
+  return Object.keys(env).filter((key) => STORAGE_ENV_HINT.test(key)).sort().slice(0, 20);
 }
 function createRedisStore(config2) {
   const redis = new Redis2(config2);
@@ -5563,7 +5574,8 @@ var entry_default = {
   async fetch(request) {
     const deps = resolveDeps();
     if (!deps) {
-      return new Response(JSON.stringify(STORAGE_MISSING), {
+      const body = { ...STORAGE_MISSING, seenEnv: listStorageEnvNames(process.env) };
+      return new Response(JSON.stringify(body), {
         status: 503,
         headers: { "content-type": "application/json; charset=utf-8" }
       });

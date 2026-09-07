@@ -5,6 +5,7 @@
  */
 import { resolveDeps } from './deps.ts';
 import { handleWheelRequest } from './handlers.ts';
+import { listStorageEnvNames } from './redisStore.ts';
 
 export const config = { runtime: 'nodejs' };
 
@@ -18,7 +19,9 @@ export default {
   async fetch(request: Request): Promise<Response> {
     const deps = resolveDeps();
     if (!deps) {
-      return new Response(JSON.stringify(STORAGE_MISSING), {
+      // Names only (no values) so a store wired under unexpected names is visible.
+      const body = { ...STORAGE_MISSING, seenEnv: listStorageEnvNames(process.env) };
+      return new Response(JSON.stringify(body), {
         status: 503,
         headers: { 'content-type': 'application/json; charset=utf-8' },
       });

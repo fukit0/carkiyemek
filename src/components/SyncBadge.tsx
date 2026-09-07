@@ -1,4 +1,4 @@
-import type { SyncStatus } from '../hooks/useWheel';
+import type { SyncStatus } from '../hooks/useWheel.ts';
 
 const LABELS: Record<SyncStatus, string> = {
   local: 'Bu cihazda kayıtlı',

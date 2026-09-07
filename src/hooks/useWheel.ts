@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { createRemoteWheel, fetchRemoteWheel, saveRemoteWheel } from '../core/api';
-import { loadLocalMenu, persistLocalMenu } from '../core/localMenu';
-import { readWheelIdFromPath, wheelPath, wheelUrl } from '../core/route';
-import type { Segment } from '../core/types';
+import { createRemoteWheel, fetchRemoteWheel, saveRemoteWheel } from '../core/api.ts';
+import { loadLocalMenu, persistLocalMenu } from '../core/localMenu.ts';
+import { readWheelIdFromPath, wheelPath, wheelUrl } from '../core/route.ts';
+import type { Segment } from '../core/types.ts';
 
 const SAVE_DEBOUNCE_MS = 700;
 /** How often an open, visible tab looks for somebody else's edits. */

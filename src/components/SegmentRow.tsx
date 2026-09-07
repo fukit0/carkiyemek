@@ -1,6 +1,6 @@
-import { MAX_WEIGHT, MIN_WEIGHT, WEIGHT_STEP } from '../core/defaults';
-import { clampWeight } from '../core/menu';
-import type { Segment } from '../core/types';
+import { MAX_WEIGHT, MIN_WEIGHT, WEIGHT_STEP } from '../core/defaults.ts';
+import { clampWeight } from '../core/menu.ts';
+import type { Segment } from '../core/types.ts';
 
 /** Upper bound of the slider; the number box still accepts up to MAX_WEIGHT. */
 const SLIDER_MAX = 10;

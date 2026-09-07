@@ -5,8 +5,8 @@ import {
   MAX_WEIGHT,
   MIN_WEIGHT,
   paletteColor,
-} from './defaults';
-import type { Segment } from './types';
+} from './defaults.ts';
+import type { Segment } from './types.ts';
 
 const SCHEMA_VERSION = 1;
 const HEX_COLOR = /^#[0-9a-fA-F]{6}$/;

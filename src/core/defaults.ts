@@ -1,4 +1,4 @@
-import type { Segment } from './types';
+import type { Segment } from './types.ts';
 
 export const MIN_WEIGHT = 0.1;
 export const MAX_WEIGHT = 100;

@@ -1,7 +1,7 @@
-import { sanitizeSegments } from '../core/menu';
-import type { Segment } from '../core/types';
-import { createWheelId, isValidWheelId } from '../core/wheelId';
-import type { RateLimiter, StoredWheel, WheelStore } from './types';
+import { sanitizeSegments } from '../core/menu.ts';
+import type { Segment } from '../core/types.ts';
+import { createWheelId, isValidWheelId } from '../core/wheelId.ts';
+import type { RateLimiter, StoredWheel, WheelStore } from './types.ts';
 
 const MAX_BODY_BYTES = 32_768;
 const RATE_WINDOW_SECONDS = 60;

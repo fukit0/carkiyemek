@@ -1,6 +1,6 @@
 import { describe, expect, test } from 'vitest';
-import { DEFAULT_SEGMENTS, MAX_WEIGHT, MIN_WEIGHT } from '../defaults';
-import { decodeMenu, encodeMenu, sanitizeSegments } from '../menu';
+import { DEFAULT_SEGMENTS, MAX_WEIGHT, MIN_WEIGHT } from '../defaults.ts';
+import { decodeMenu, encodeMenu, sanitizeSegments } from '../menu.ts';
 
 describe('encodeMenu / decodeMenu', () => {
   test('round-trips a menu including Turkish characters', () => {

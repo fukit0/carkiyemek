@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, test } from 'vitest';
-import { handleWheelRequest, type HandlerDeps } from '../handlers';
-import { createMemoryRateLimiter, createMemoryStore } from '../memoryStore';
-import { createWheelId, isValidWheelId } from '../../core/wheelId';
+import { handleWheelRequest, type HandlerDeps } from '../handlers.ts';
+import { createMemoryRateLimiter, createMemoryStore } from '../memoryStore.ts';
+import { createWheelId, isValidWheelId } from '../../core/wheelId.ts';
 
 const BASE = 'https://carkiyemek.test/api/wheel';
 const segments = [

@@ -1,6 +1,6 @@
-import { DEFAULT_SEGMENTS } from './defaults';
-import { decodeMenu, sanitizeSegments } from './menu';
-import type { Segment } from './types';
+import { DEFAULT_SEGMENTS } from './defaults.ts';
+import { decodeMenu, sanitizeSegments } from './menu.ts';
+import type { Segment } from './types.ts';
 
 const STORAGE_KEY = 'carkiyemek.menu.v1';
 const SHARE_PARAM = 'm';

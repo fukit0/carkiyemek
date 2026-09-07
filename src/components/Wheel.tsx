@@ -1,9 +1,9 @@
 import { useRef } from 'react';
-import { readableTextColor } from '../core/color';
-import { slicePath } from '../core/svgPath';
-import type { Segment } from '../core/types';
-import { buildGeometry } from '../core/wheel';
-import { useBoundaryDrag } from '../hooks/useBoundaryDrag';
+import { readableTextColor } from '../core/color.ts';
+import { slicePath } from '../core/svgPath.ts';
+import type { Segment } from '../core/types.ts';
+import { buildGeometry } from '../core/wheel.ts';
+import { useBoundaryDrag } from '../hooks/useBoundaryDrag.ts';
 
 const SIZE = 400;
 const CENTER = SIZE / 2;
@@ -97,7 +97,7 @@ export function Wheel({
           ))}
         </g>
 
-        <path className="wheel__pointer" d="M 200 4 L 218 40 L 182 40 Z" />
+        <path className="wheel__pointer" d="M 178 -6 L 222 -6 L 200 48 Z" />
       </svg>
 
       <button

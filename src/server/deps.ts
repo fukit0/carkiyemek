@@ -1,6 +1,6 @@
-import type { HandlerDeps } from './handlers';
-import { createMemoryRateLimiter, createMemoryStore } from './memoryStore';
-import { createRedisRateLimiter, createRedisStore, readRedisConfig } from './redisStore';
+import type { HandlerDeps } from './handlers.ts';
+import { createMemoryRateLimiter, createMemoryStore } from './memoryStore.ts';
+import { createRedisRateLimiter, createRedisStore, readRedisConfig } from './redisStore.ts';
 
 const MEMORY_STORE_FLAG = 'CARKIYEMEK_MEMORY_STORE';
 

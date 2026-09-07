@@ -1,15 +1,15 @@
 import { useCallback, useMemo, useState } from 'react';
-import { SegmentRow } from './components/SegmentRow';
-import { SyncBadge } from './components/SyncBadge';
-import { Wheel } from './components/Wheel';
-import { DEFAULT_SEGMENTS, DEFAULT_WEIGHT, paletteColor } from './core/defaults';
-import { createId } from './core/menu';
-import { resizeAtBoundary } from './core/resize';
-import { playTick, playWin } from './core/sound';
-import type { Segment } from './core/types';
-import { totalWeight } from './core/wheel';
-import { useSpin } from './hooks/useSpin';
-import { useWheel } from './hooks/useWheel';
+import { SegmentRow } from './components/SegmentRow.tsx';
+import { SyncBadge } from './components/SyncBadge.tsx';
+import { Wheel } from './components/Wheel.tsx';
+import { DEFAULT_SEGMENTS, DEFAULT_WEIGHT, paletteColor } from './core/defaults.ts';
+import { createId } from './core/menu.ts';
+import { resizeAtBoundary } from './core/resize.ts';
+import { playTick, playWin } from './core/sound.ts';
+import type { Segment } from './core/types.ts';
+import { totalWeight } from './core/wheel.ts';
+import { useSpin } from './hooks/useSpin.ts';
+import { useWheel } from './hooks/useWheel.ts';
 
 const MIN_SEGMENTS = 2;
 const COPY_FEEDBACK_MS = 2200;
@@ -194,7 +194,7 @@ export default function App() {
               {copyState === 'copied'
                 ? '✓ Kopyalandı'
                 : copyState === 'failed'
-                  ? 'Kopyalanamadı'
+                  ? 'Adres çubuğundan kopyala'
                   : isShared
                     ? '🔗 Linki kopyala'
                     : '🔗 Ekiple paylaş'}

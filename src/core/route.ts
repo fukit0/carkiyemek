@@ -1,4 +1,4 @@
-import { isValidWheelId } from './wheelId';
+import { isValidWheelId } from './wheelId.ts';
 
 const SHARED_PREFIX = '/c/';
 

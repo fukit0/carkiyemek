@@ -1,8 +1,8 @@
 import { describe, expect, test } from 'vitest';
-import { MIN_WEIGHT } from '../defaults';
-import { resizeAtBoundary } from '../resize';
-import { totalWeight } from '../wheel';
-import type { Segment } from '../types';
+import { MIN_WEIGHT } from '../defaults.ts';
+import { resizeAtBoundary } from '../resize.ts';
+import { totalWeight } from '../wheel.ts';
+import type { Segment } from '../types.ts';
 
 const seg = (id: string, weight: number): Segment => ({
   id,

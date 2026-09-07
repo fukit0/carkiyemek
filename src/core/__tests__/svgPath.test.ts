@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'vitest';
-import { polarToCartesian, slicePath } from '../svgPath';
+import { polarToCartesian, slicePath } from '../svgPath.ts';
 
 describe('polarToCartesian', () => {
   test('0 degrees points straight up from the centre', () => {

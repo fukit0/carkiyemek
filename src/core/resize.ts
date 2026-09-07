@@ -1,7 +1,7 @@
-import { MIN_WEIGHT } from './defaults';
-import { clampWeight } from './menu';
-import type { Segment } from './types';
-import { buildGeometry, totalWeight } from './wheel';
+import { MIN_WEIGHT } from './defaults.ts';
+import { clampWeight } from './menu.ts';
+import type { Segment } from './types.ts';
+import { buildGeometry, totalWeight } from './wheel.ts';
 
 /**
  * Moves the border between slice `boundaryIndex` and its neighbour to `angle`,

@@ -1,12 +1,12 @@
 import { describe, expect, test } from 'vitest';
-import type { Segment } from '../types';
+import type { Segment } from '../types.ts';
 import {
   buildGeometry,
   indexAtPointer,
   pickWeightedIndex,
   rotationToLandOn,
   totalWeight,
-} from '../wheel';
+} from '../wheel.ts';
 
 const seg = (id: string, weight: number): Segment => ({
   id,

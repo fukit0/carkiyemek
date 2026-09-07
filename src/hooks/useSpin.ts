@@ -1,10 +1,12 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import type { Segment } from '../core/types';
-import { indexAtPointer, pickWeightedIndex, rotationToLandOn } from '../core/wheel';
+import type { Segment } from '../core/types.ts';
+import { indexAtPointer, pickWeightedIndex, rotationToLandOn } from '../core/wheel.ts';
 
 const SPIN_DURATION_MS = 5200;
 const MIN_FULL_TURNS = 5;
 const EXTRA_TURN_SPREAD = 2;
+/** Small offset so the resting pointer sits inside a slice, not on a seam. */
+const INITIAL_ROTATION = -6;
 
 function easeOutQuart(progress: number): number {
   return 1 - Math.pow(1 - progress, 4);
@@ -17,7 +19,7 @@ type SpinOptions = {
 };
 
 export function useSpin({ segments, onTick, onFinish }: SpinOptions) {
-  const [rotation, setRotation] = useState(0);
+  const [rotation, setRotation] = useState(INITIAL_ROTATION);
   const [isSpinning, setIsSpinning] = useState(false);
   const frameRef = useRef<number | null>(null);
 

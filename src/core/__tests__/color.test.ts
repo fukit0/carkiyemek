@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'vitest';
-import { readableTextColor } from '../color';
+import { readableTextColor } from '../color.ts';
 
 describe('readableTextColor', () => {
   test('uses dark ink on light fills', () => {

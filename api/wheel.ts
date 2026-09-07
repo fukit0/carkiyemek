@@ -1,5 +1,5 @@
-import { resolveDeps } from '../src/server/deps';
-import { handleWheelRequest } from '../src/server/handlers';
+import { resolveDeps } from '../src/server/deps.ts';
+import { handleWheelRequest } from '../src/server/handlers.ts';
 
 export const config = { runtime: 'nodejs' };
 

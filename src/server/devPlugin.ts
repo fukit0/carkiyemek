@@ -1,7 +1,7 @@
 import type { IncomingMessage, ServerResponse } from 'node:http';
 import type { Plugin } from 'vite';
-import { resolveDeps } from './deps';
-import { handleWheelRequest, type HandlerDeps } from './handlers';
+import { resolveDeps } from './deps.ts';
+import { handleWheelRequest, type HandlerDeps } from './handlers.ts';
 
 const API_PATH = '/api/wheel';
 

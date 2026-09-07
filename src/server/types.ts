@@ -1,4 +1,4 @@
-import type { Segment } from '../core/types';
+import type { Segment } from '../core/types.ts';
 
 export type StoredWheel = {
   readonly id: string;

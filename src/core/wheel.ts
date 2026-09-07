@@ -1,4 +1,4 @@
-import type { Segment, SliceGeometry } from './types';
+import type { Segment, SliceGeometry } from './types.ts';
 
 const FULL_TURN = 360;
 /** Share of a slice kept free at each edge so the pointer never lands on a border. */

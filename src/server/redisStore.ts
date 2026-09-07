@@ -1,5 +1,5 @@
 import { Redis } from '@upstash/redis';
-import type { RateLimiter, StoredWheel, WheelStore } from './types';
+import type { RateLimiter, StoredWheel, WheelStore } from './types.ts';
 
 const KEY_PREFIX = 'wheel:';
 const RATE_PREFIX = 'rate:';

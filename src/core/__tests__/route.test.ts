@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'vitest';
-import { readWheelIdFromPath, wheelPath, wheelUrl } from '../route';
+import { readWheelIdFromPath, wheelPath, wheelUrl } from '../route.ts';
 
 describe('readWheelIdFromPath', () => {
   test('reads a valid shared id', () => {

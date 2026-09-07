@@ -1,4 +1,4 @@
-import type { RateLimiter, StoredWheel, WheelStore } from './types';
+import type { RateLimiter, StoredWheel, WheelStore } from './types.ts';
 
 /** Process-local store used by `npm run dev`; never used on Vercel. */
 export function createMemoryStore(): WheelStore {

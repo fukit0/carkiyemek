@@ -1,6 +1,6 @@
-import { sanitizeSegments } from './menu';
-import type { Segment } from './types';
-import { isValidWheelId } from './wheelId';
+import { sanitizeSegments } from './menu.ts';
+import type { Segment } from './types.ts';
+import { isValidWheelId } from './wheelId.ts';
 
 const ENDPOINT = '/api/wheel';
 

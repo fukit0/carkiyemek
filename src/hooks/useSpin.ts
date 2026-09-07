@@ -5,8 +5,8 @@ import { indexAtPointer, pickWeightedIndex, rotationToLandOn } from '../core/whe
 const SPIN_DURATION_MS = 5200;
 const MIN_FULL_TURNS = 5;
 const EXTRA_TURN_SPREAD = 2;
-/** Small offset so the resting pointer sits inside a slice, not on a seam. */
-const INITIAL_ROTATION = -6;
+/** Resting offset: keeps the pointer inside a slice and clear of the first border handle. */
+const INITIAL_ROTATION = -20;
 
 function easeOutQuart(progress: number): number {
   return 1 - Math.pow(1 - progress, 4);

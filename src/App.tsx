@@ -34,7 +34,7 @@ export default function App() {
     [isMuted],
   );
 
-  const { rotation, isSpinning, spin } = useSpin({
+  const { rotation, isSpinning, spin, setRotation } = useSpin({
     segments,
     onTick: handleTick,
     onFinish: handleFinish,
@@ -87,9 +87,12 @@ export default function App() {
   const resizeBoundary = useCallback(
     (boundaryIndex: number, angle: number) => {
       setWinner(null);
-      setSegments(resizeAtBoundary(segments, boundaryIndex, angle));
+      const { segments: resized, rotationDelta } = resizeAtBoundary(segments, boundaryIndex, angle);
+      setSegments(resized);
+      // The wrap-around border only follows the pointer if the wheel turns with it.
+      if (rotationDelta !== 0) setRotation((current) => current + rotationDelta);
     },
-    [segments, setSegments],
+    [segments, setRotation, setSegments],
   );
 
   const copyShareLink = useCallback(async () => {

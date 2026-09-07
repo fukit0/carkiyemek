@@ -10,6 +10,9 @@ kadar adaletli) döner.
   yanında çıkma ihtimali yüzde olarak görünür.
 - **Çark üstünden ince ayar** — iki dilim arasındaki beyaz tutamağı sürükleyince
   o iki seçenek kendi arasında pay değiş tokuş eder, çarkın geri kalanı bozulmaz.
+  Son dilimle ilk dilim arasındaki sınır da sürüklenebilir: o sınır düzende 0°'ye
+  çivili olduğu için takasla birlikte çark aynı miktarda döndürülür, böylece sınır
+  parmağı takip ederken diğer sınırlar ekranda yerinde kalır.
 - **Gerçek ağırlıklı çekiliş** — kazanan önce ağırlıklara göre seçilir, animasyon
   ibreyi tam o dilimin içine oturtur; dilim kenarına denk gelmez.
 - **Menü hatırlanır** — tarayıcıya kaydedilir, ertesi gün aynı liste açılır.

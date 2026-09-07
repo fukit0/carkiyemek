@@ -77,7 +77,8 @@ export function Wheel({
             );
           })}
 
-          {geometry.slice(0, -1).map((slice) => (
+          {segments.length > 1 &&
+            geometry.map((slice) => (
             <g
               key={`handle-${segments[slice.index].id}`}
               className={
@@ -89,12 +90,12 @@ export function Wheel({
               onPointerUp={handlePointerUp}
               onPointerCancel={handlePointerUp}
               role="separator"
-              aria-label={`${segments[slice.index].label} ile ${segments[slice.index + 1].label} arasındaki sınır`}
+              aria-label={`${segments[slice.index].label} ile ${segments[(slice.index + 1) % segments.length].label} arasındaki sınır`}
             >
               <circle cx={CENTER} cy={CENTER - HANDLE_RADIUS} r={16} className="wheel__handle-hit" />
               <circle cx={CENTER} cy={CENTER - HANDLE_RADIUS} r={7} className="wheel__handle-dot" />
             </g>
-          ))}
+            ))}
         </g>
 
         <path className="wheel__pointer" d="M 178 -6 L 222 -6 L 200 48 Z" />

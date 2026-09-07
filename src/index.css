@@ -120,6 +120,8 @@ button, input { font: inherit; color: inherit; }
 }
 
 .wheel__pointer {
+  /* Never let the pointer swallow a drag aimed at the handle beneath it. */
+  pointer-events: none;
   fill: var(--accent);
   stroke: #1a1209;
   stroke-width: 2;

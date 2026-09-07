@@ -76,3 +76,22 @@ describe('sanitizeSegments', () => {
     expect(sanitizeSegments(many)!.length).toBeLessThanOrEqual(40);
   });
 });
+
+describe('sanitizeSegments id handling', () => {
+  test('keeps ids that come back from the server so React keys stay stable', () => {
+    const result = sanitizeSegments([
+      { id: 'keep-me', label: 'Pide', weight: 1, color: '#ff0000' },
+    ])!;
+    expect(result[0].id).toBe('keep-me');
+  });
+
+  test('replaces duplicate or unsafe ids', () => {
+    const result = sanitizeSegments([
+      { id: 'same', label: 'A', weight: 1, color: '#ff0000' },
+      { id: 'same', label: 'B', weight: 1, color: '#ff0000' },
+      { id: '../../etc', label: 'C', weight: 1, color: '#ff0000' },
+    ])!;
+    expect(new Set(result.map((s) => s.id)).size).toBe(3);
+    expect(result[0].id).toBe('same');
+  });
+});

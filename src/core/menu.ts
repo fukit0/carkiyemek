@@ -10,6 +10,7 @@ import type { Segment } from './types';
 
 const SCHEMA_VERSION = 1;
 const HEX_COLOR = /^#[0-9a-fA-F]{6}$/;
+const SAFE_ID = /^[A-Za-z0-9_-]{1,40}$/;
 
 type CompactSegment = [label: string, weight: number, color: string];
 type CompactMenu = { v: number; s: CompactSegment[] };
@@ -40,18 +41,31 @@ function readColor(raw: unknown, index: number): string {
   return typeof raw === 'string' && HEX_COLOR.test(raw) ? raw : paletteColor(index);
 }
 
+/** Keeps a caller's id when it is safe and unused, so React keys survive a round trip. */
+function readId(raw: unknown, used: Set<string>): string {
+  if (typeof raw === 'string' && SAFE_ID.test(raw) && !used.has(raw)) {
+    used.add(raw);
+    return raw;
+  }
+  let generated = createId();
+  while (used.has(generated)) generated = createId();
+  used.add(generated);
+  return generated;
+}
+
 /** Validates untrusted input (URL hash, localStorage) into a usable wheel. */
 export function sanitizeSegments(raw: unknown): Segment[] | null {
   if (!Array.isArray(raw) || raw.length === 0) return null;
 
   const segments: Segment[] = [];
+  const usedIds = new Set<string>();
   for (const entry of raw.slice(0, MAX_SEGMENTS)) {
     if (typeof entry !== 'object' || entry === null) continue;
     const candidate = entry as Record<string, unknown>;
     const label = readLabel(candidate.label);
     if (label === null) continue;
     segments.push({
-      id: createId(),
+      id: readId(candidate.id, usedIds),
       label,
       weight: readWeight(candidate.weight),
       color: readColor(candidate.color, segments.length),

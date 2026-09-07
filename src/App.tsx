@@ -1,5 +1,6 @@
 import { useCallback, useMemo, useState } from 'react';
 import { SegmentRow } from './components/SegmentRow';
+import { SyncBadge } from './components/SyncBadge';
 import { Wheel } from './components/Wheel';
 import { DEFAULT_SEGMENTS, DEFAULT_WEIGHT, paletteColor } from './core/defaults';
 import { createId } from './core/menu';
@@ -7,14 +8,14 @@ import { resizeAtBoundary } from './core/resize';
 import { playTick, playWin } from './core/sound';
 import type { Segment } from './core/types';
 import { totalWeight } from './core/wheel';
-import { buildShareUrl, useMenu } from './hooks/useMenu';
 import { useSpin } from './hooks/useSpin';
+import { useWheel } from './hooks/useWheel';
 
 const MIN_SEGMENTS = 2;
 const COPY_FEEDBACK_MS = 2200;
 
 export default function App() {
-  const { segments, setSegments } = useMenu();
+  const { segments, setSegments, status, notice, isShared, share, refresh } = useWheel();
   const [winner, setWinner] = useState<Segment | null>(null);
   const [isMuted, setIsMuted] = useState(false);
   const [copyState, setCopyState] = useState<'idle' | 'copied' | 'failed'>('idle');
@@ -92,15 +93,21 @@ export default function App() {
   );
 
   const copyShareLink = useCallback(async () => {
+    const url = await share();
+    if (!url) {
+      setCopyState('failed');
+      window.setTimeout(() => setCopyState('idle'), COPY_FEEDBACK_MS);
+      return;
+    }
     try {
-      await navigator.clipboard.writeText(buildShareUrl(segments));
+      await navigator.clipboard.writeText(url);
       setCopyState('copied');
     } catch (error) {
       console.warn('Bağlantı kopyalanamadı:', error);
       setCopyState('failed');
     }
     window.setTimeout(() => setCopyState('idle'), COPY_FEEDBACK_MS);
-  }, [segments]);
+  }, [share]);
 
   return (
     <div className="page">
@@ -109,15 +116,20 @@ export default function App() {
           <h1>Çarkıyemek</h1>
           <p className="page__tagline">Öğlen ne yesek tartışmasını 5 saniyede bitir.</p>
         </div>
-        <button
-          type="button"
-          className="ghost"
-          onClick={() => setIsMuted((muted) => !muted)}
-          aria-pressed={isMuted}
-        >
-          {isMuted ? '🔇 Ses kapalı' : '🔊 Ses açık'}
-        </button>
+        <div className="page__tools">
+          <SyncBadge status={status} />
+          <button
+            type="button"
+            className="ghost"
+            onClick={() => setIsMuted((muted) => !muted)}
+            aria-pressed={isMuted}
+          >
+            {isMuted ? '🔇 Ses kapalı' : '🔊 Ses açık'}
+          </button>
+        </div>
       </header>
+
+      {notice && <p className="notice">{notice}</p>}
 
       <main className="page__body">
         <section className="panel panel--wheel">
@@ -173,19 +185,28 @@ export default function App() {
             <button type="button" className="ghost" onClick={reset}>
               Sıfırla
             </button>
+            {isShared && (
+              <button type="button" className="ghost" onClick={() => void refresh()}>
+                ↻ Yenile
+              </button>
+            )}
             <button type="button" className="ghost" onClick={copyShareLink}>
               {copyState === 'copied'
                 ? '✓ Kopyalandı'
                 : copyState === 'failed'
                   ? 'Kopyalanamadı'
-                  : '🔗 Ekiple paylaş'}
+                  : isShared
+                    ? '🔗 Linki kopyala'
+                    : '🔗 Ekiple paylaş'}
             </button>
           </div>
         </section>
       </main>
 
       <footer className="page__foot">
-        Menü tarayıcına kaydedilir. Paylaş bağlantısı menüyü karşı tarafa taşır.
+        {isShared
+          ? 'Ortak çark: değişiklikler herkes için kaydedilir, bağlantıyı açan aynı listeyi görür.'
+          : 'Menü şimdilik sadece bu tarayıcıda. "Ekiple paylaş" dediğinde kısa bir bağlantı oluşturulur ve ekip aynı çarkı düzenler.'}
       </footer>
     </div>
   );

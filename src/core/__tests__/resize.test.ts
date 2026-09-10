@@ -54,9 +54,15 @@ describe('resizeAtBoundary, wrap-around border', () => {
     expect(result[1]).toEqual(segments[1]);
   });
 
-  test('reports the turn that keeps the border under the pointer', () => {
-    expect(resizeAtBoundary(segments, 2, 30).rotationDelta).toBeCloseTo(30, 1);
-    expect(resizeAtBoundary(segments, 2, 350).rotationDelta).toBeCloseTo(-10, 1);
+  test('turns the wheel so the border follows the pointer', () => {
+    // Weights move in 0.1 steps, so the border can only land on the angles
+    // those steps allow; it must stay within one step of the pointer.
+    const stepAngle = (0.1 / totalWeight(segments)) * 360;
+
+    expect(resizeAtBoundary(segments, 2, 30).rotationDelta - 30).toBeLessThanOrEqual(stepAngle);
+    expect(resizeAtBoundary(segments, 2, 30).rotationDelta).toBeGreaterThan(0);
+    expect(resizeAtBoundary(segments, 2, 350).rotationDelta + 10).toBeLessThanOrEqual(stepAngle);
+    expect(resizeAtBoundary(segments, 2, 350).rotationDelta).toBeLessThan(0);
   });
 
   test('the other borders do not move on screen after the trade', () => {
@@ -74,6 +80,49 @@ describe('resizeAtBoundary, wrap-around border', () => {
     const pair = [seg('a', 2), seg('b', 1), seg('c', 2)];
     expect(resizeAtBoundary(pair, 2, 143).segments[0].weight).toBeGreaterThanOrEqual(MIN_WEIGHT);
     expect(resizeAtBoundary(pair, 2, 217).segments[2].weight).toBeGreaterThanOrEqual(MIN_WEIGHT);
+  });
+});
+
+describe('resizeAtBoundary, pointer dragged outside the pair', () => {
+  const segments = [seg('a', 1), seg('b', 2), seg('c', 1)];
+
+  test('snaps to the near end instead of jumping across the wheel', () => {
+    // Arrange: the a|b border sits at 90deg; 80deg is just short of it.
+    // Act: aim far behind the pair start, at 350deg
+    const { segments: result } = resizeAtBoundary(segments, 0, 350);
+
+    // Assert: slice a collapses to the minimum rather than swallowing b
+    expect(result[0].weight).toBe(MIN_WEIGHT);
+    expect(result[1].weight).toBeGreaterThan(segments[1].weight);
+  });
+
+  test('holding the pointer off the wrap pair does not keep turning the wheel', () => {
+    // Arrange: replay a drag the way the wheel does, with a fixed pointer
+    // far outside the wrap pair — this is the runaway-spin regression.
+    const pointerOnScreen = 150;
+    let current: readonly Segment[] = segments;
+    let rotation = 0;
+    const deltas: number[] = [];
+
+    // Act
+    for (let move = 0; move < 6; move += 1) {
+      const local = ((pointerOnScreen - rotation) % 360 + 360) % 360;
+      const step = resizeAtBoundary(current, current.length - 1, local);
+      current = step.segments;
+      rotation += step.rotationDelta;
+      deltas.push(step.rotationDelta);
+    }
+
+    // Assert: the wheel settles instead of ratcheting round on every move
+    expect(Math.abs(deltas[deltas.length - 1])).toBeLessThan(0.01);
+    expect(Math.abs(rotation)).toBeLessThan(360);
+  });
+
+  test('a drag that stays put reports no further turn', () => {
+    const first = resizeAtBoundary(segments, segments.length - 1, 30);
+    const rotation = first.rotationDelta;
+    const second = resizeAtBoundary(first.segments, segments.length - 1, 30 - rotation);
+    expect(Math.abs(second.rotationDelta)).toBeLessThan(0.01);
   });
 });
 

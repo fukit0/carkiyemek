@@ -98,9 +98,18 @@ button, input { font: inherit; color: inherit; }
 
 /* ---------- wheel ---------- */
 
-.wheel { position: relative; width: min(100%, 460px); }
+.wheel { position: relative; width: min(100%, 620px); }
 
-.wheel__svg { display: block; width: 100%; height: auto; overflow: visible; touch-action: none; }
+.wheel__svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+  touch-action: none;
+  /* Dragging a border must not select the labels it passes over. */
+  user-select: none;
+  -webkit-user-select: none;
+}
 
 .wheel__rim {
   fill: rgba(0, 0, 0, 0.45);
@@ -113,11 +122,15 @@ button, input { font: inherit; color: inherit; }
 .wheel__slice.is-winner { stroke: #fff6e6; stroke-width: 3; }
 
 .wheel__label {
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 600;
   letter-spacing: -0.01em;
   pointer-events: none;
 }
+
+.wheel__label.is-winner { font-weight: 800; }
+
+.wheel__tick { stroke-width: 2; stroke-linecap: round; opacity: 0.75; pointer-events: none; }
 
 .wheel__pointer {
   /* Never let the pointer swallow a drag aimed at the handle beneath it. */
@@ -146,15 +159,15 @@ button, input { font: inherit; color: inherit; }
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 27%;
+  width: 20%;
   aspect-ratio: 1;
   border-radius: 50%;
   border: 3px solid #1a1209;
   background: radial-gradient(circle at 35% 30%, #ffd28a, var(--accent));
   color: var(--accent-ink);
   font-weight: 800;
-  font-size: clamp(13px, 2.6vw, 17px);
-  letter-spacing: 0.06em;
+  font-size: clamp(11px, 1.9vw, 15px);
+  letter-spacing: 0.05em;
   cursor: pointer;
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.45);
   transition: transform 0.12s ease, filter 0.12s ease;

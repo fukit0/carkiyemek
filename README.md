@@ -8,6 +8,9 @@ kadar adaletli) döner.
 
 - **Ağırlıklı dilimler** — her seçeneğin ağırlığı 0,1 adımlarla 0,1–100 arasında ayarlanır,
   yanında çıkma ihtimali yüzde olarak görünür.
+- **Etiketler çarkın dışında** — isimler dilimin içine sığmaya çalışmaz; yarıçap yönünde
+  dışarıda durur ve dilimden çıkan renkli bir çizgiyle bağlanır. Böylece %1'lik bir dilimin
+  adı bile okunur. Sıkışan komşular bir sonraki halkaya kaydırılır.
 - **Çark üstünden ince ayar** — iki dilim arasındaki beyaz tutamağı sürükleyince
   o iki seçenek kendi arasında pay değiş tokuş eder, çarkın geri kalanı bozulmaz.
   Son dilimle ilk dilim arasındaki sınır da sürüklenebilir: o sınır düzende 0°'ye

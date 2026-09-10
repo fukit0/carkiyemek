@@ -58,9 +58,16 @@ function describePair(
   };
 }
 
-/** Distance from the pair's start to `angle`, walking clockwise. */
+/**
+ * Distance from the pair's start to `angle`, walking clockwise. A pointer that
+ * left the pair snaps to the nearer end: wrapping it around instead would send
+ * the border to the opposite end and, on the wrap-around border, let every
+ * further move turn the wheel again.
+ */
 function offsetInPair(pair: Pair, angle: number): number {
-  return ((angle - pair.spanStart) % FULL_TURN + FULL_TURN) % FULL_TURN;
+  const raw = ((angle - pair.spanStart) % FULL_TURN + FULL_TURN) % FULL_TURN;
+  if (raw <= pair.spanLength) return raw;
+  return raw - pair.spanLength <= FULL_TURN - raw ? pair.spanLength : 0;
 }
 
 /**
@@ -97,6 +104,12 @@ export function resizeAtBoundary(
     return segment;
   });
 
-  const isWrap = pair.rightIndex === 0;
-  return { segments: resized, rotationDelta: isWrap ? offset - pair.borderOffset : 0 };
+  if (pair.rightIndex !== 0) return { segments: resized, rotationDelta: 0 };
+
+  // Derive the turn from the weights that were actually stored, not from the
+  // requested angle: rounding and clamping would otherwise leave the wheel
+  // turning a little further on every pointer move.
+  const newTotal = totalWeight(resized);
+  const storedBorderOffset = newTotal > 0 ? (leftWeight / newTotal) * FULL_TURN : pair.borderOffset;
+  return { segments: resized, rotationDelta: storedBorderOffset - pair.borderOffset };
 }
